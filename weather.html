@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>practice weather app</title>
+    <link rel="stylesheet" href="src/project.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    />
+  </head>
+  <body>
+  <div class="card">
+      <div class="card-body">    
+        <div class="container">
+        <form id="search-city">
+           <input
+              type="search"
+              name="city"
+              id="searchCity"
+              placeholder="Enter City"
+              class="searchInput"
+            />
+            <input type="submit" value="Search" /></div>     
+      <h1 class="city">San Diego</h1>
+        <span class="currentDay">null</span>
+        <span class="currentTime">null</span> 
+      <div class="row">
+        <div class="col-6">
+          <img
+            src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png"
+            alt="cloudy"
+          />
+          <span class="temp" id="temp">null</span>
+        </div>
+        <div class="col-6">
+          <ul>
+            <li>Clear</li>
+            <li>Precipitation: 66%</li>
+            <li>Wind: 6km/h</li>
+          </ul>
+        </div>
+        <hr />
+      </div>
+          <section class="other-days">
+            <div class="row three">
+              <div class="col">Sunday</div>
+              <div class="col">Monday</div>
+              <div class="col">Tuesday</div>
+              <div class="col">Wednesday</div>
+              <div class="col">Thursday</div>
+            </div>
+            <div class="row four">
+              <div class="col emoji">⛅️</div>
+              <div class="col emoji">⛅️</div>
+              <div class="col emoji">🌤</div>
+              <div class="col emoji">🌦</div>
+              <div class="col emoji">☀️</div>
+            </div>
+            <div class="row five">
+              <div class="col"><strong>95°F</strong>/35°C</div>
+              <div class="col"><strong>95°F</strong>/35°C</div>
+              <div class="col"><strong>95°F</strong>/35°C</div>
+              <div class="col"><strong>95°F</strong>/35°C</div>
+              <div class="col"><strong>95°F</strong>/35°C</div>
+            </div>
+       </div>
+    </div>
+<script>
+  let weather = {
+    sandiego: {
+      temp: 70,
+      humidity: 50,
+    },
+  };
+  let city = prompt("Enter city");
+  city = city.toLowerCase();
+  if (weather[city] !== undefined) {
+    let temperature = weather[city].temp;
+    let humidity = weather[city].humidity;
+    alert(
+      "it is currently " +
+        temperature +
+        "°F in " +
+        city +
+        " with a humidity of " +
+        humidity +
+        "%"
+    );
+  } else {
+    alert(
+      "sorry we dont know the weather for this city, try going to https://www.google.com/search?q=weather+" +
+        city
+    );
+  }
+
+  //hw 4
+
+  let now = new Date();
+  let date = now.getDate();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  let day = days[now.getDay()];
+
+  let currentDay = document.querySelector(".currentDay");
+  let currentTime = document.querySelector(".currentTime");
+  currentDay.innerHTML = `${day}`;
+  currentTime.innerHTML = `${hours}:${minutes}`;
+
+
+  function displayCity(event) {
+    event.preventDefault();
+    let searchInput = document.querySelector(".searchInput");
+    let city = document.querySelector(".city");
+    city.innerHTML = `${searchInput.value}`;
+  }
+  let form = document.querySelector("#search-city");
+  form.addEventListener("submit", displayCity);
+
+
+  //h5
+
+  function showTemperature (response) {
+    let temperature = Math.round(response.data.main.temp);
+  }
+let heading = document.querySelector(".temp");
+heading.innerHTML = `${temperature}°C`
+
+  function getPosition (position) {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    let apiKey = "9c071107246b07f6a0b6af613b122546"
+    let apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric"
+    
+    axios.get(apiUrl).then(showTemperature);
+  }
+
+  navigator.geolocation.getCurrentPosition(getPosition);
+
+</script>
+  </body>
+</html>
